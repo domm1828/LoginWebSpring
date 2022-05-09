@@ -10,7 +10,8 @@ import net.dmoreno.webLogin.repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.HashSet;
-
+import java.util.List;
+import org.springframework.data.domain.Sort;
 @Service
 public class UserService {
 	 	private UserRepository userRepository;
@@ -40,5 +41,9 @@ public class UserService {
 	        Role userRole = roleRepository.findByRole("USERS");
 	        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 	        return userRepository.save(user);
+	    }
+	    
+	    public List<User> listAll() {
+	        return userRepository.findAll(Sort.by("email").ascending());
 	    }
 }
