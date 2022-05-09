@@ -56,11 +56,5 @@ public class LoginController {
     	   return "register";
    }
     
-	    @GetMapping("/admin/home")
-	    public String home(Model model) {
-	    	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	          User user = userService.findUserByUserName(auth.getName());
-	          model.addAttribute("userName", "Bienvenido " + user.getUserName() + "/" + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-	    	return "admin/index";
-	    }
+
 }

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import net.dmoreno.webLogin.service.DataUserDetailsService;
 
@@ -19,6 +20,9 @@ public class WebSecurityConfiguration  extends WebSecurityConfigurerAdapter {
 	 private BCryptPasswordEncoder bCryptPasswordEncoder;
 	 @Autowired
 	 private DataUserDetailsService userDetailsService;
+	 @Autowired
+	 AuthenticationSuccessHandler successHandler;
+		
 	   @Override
 	    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	                auth
@@ -38,14 +42,15 @@ public class WebSecurityConfiguration  extends WebSecurityConfigurerAdapter {
 	                .antMatchers(loginPage).permitAll()
 	                .antMatchers("/registration").permitAll()
 	                .antMatchers("/admin/**").hasAuthority("ADMIN")
+	                .antMatchers("/users/**").hasAuthority("USERS")
 	                .anyRequest()
 	                .authenticated()
 	                .and().csrf().disable()
 	                .formLogin()
 	                .loginPage(loginPage)
 	                .loginPage("/")
-	                .failureUrl("/login?error=true")
-	                .defaultSuccessUrl("/admin/home")
+	                .successHandler(successHandler)
+	                .failureUrl("/login?error=true") 
 	                .usernameParameter("user_name")
 	                .passwordParameter("password")
 	                .and().logout()
