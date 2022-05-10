@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import net.dmoreno.webLogin.exports.UserExcelExporter;
 import net.dmoreno.webLogin.exports.UserPDFExporter;
 import net.dmoreno.webLogin.models.User;
 import net.dmoreno.webLogin.service.UserService;
@@ -48,6 +49,23 @@ public class UserController {
          
         UserPDFExporter exporter = new UserPDFExporter(listUsers);
         exporter.export(response);
+         
+    }
+
+    @GetMapping("/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+         
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+         
+        List<User> listUsers = userService.listAll();
+         
+        UserExcelExporter excelExporter = new UserExcelExporter(listUsers);
+        excelExporter.export(response);
          
     }
 }

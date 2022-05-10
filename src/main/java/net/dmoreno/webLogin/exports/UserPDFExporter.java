@@ -24,9 +24,8 @@ public class UserPDFExporter {
 	         
 	        Font font = FontFactory.getFont(FontFactory.HELVETICA);
 	        font.setColor(Color.WHITE);
-	         
-	   
-	         
+	          
+	        
 	        cell.setPhrase(new Phrase("E-mail", font));
 	        table.addCell(cell);
 	         
